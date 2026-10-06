@@ -1,0 +1,5 @@
+{
+  "name": "thetaone-skills",
+  "private": true,
+  "scripts": { "validate": "bun scripts/validate.ts" }
+}
