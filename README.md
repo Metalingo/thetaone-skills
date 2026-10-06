@@ -1,95 +1,188 @@
 # Thetaone Skills
 
-Eight composable agent skills for evidence-based development. Built from Thetaone's working practices; project conventions stay in the project.
+Thetaone의 개발 방식을 공유하기 위한 AI 에이전트 스킬 모음입니다. 해결할 문제를 명확히 하고, 구현과 리뷰를 진행한 뒤, 배포된 기능이 실제로 동작하는지 근거를 확인합니다.
 
-| Skill | Outcome |
+각 스킬은 필요한 시점에 독립적으로 사용할 수 있습니다. 프로젝트마다 다른 브랜치 전략, 테스트 명령, 배포 도구는 해당 프로젝트의 문서를 따릅니다.
+
+## 스킬 한눈에 보기
+
+| 스킬 | 역할 |
 | --- | --- |
-| `create-linear-issue` | Investigated Linear issues and verifiable vertical slices |
-| `clarify` | A clear problem, scope, and success criteria |
-| `implement` | Reviewed plan, worktree implementation, checks, and authorized PR handoff |
-| `smart-commit` | Traceable commit and push |
-| `create-pr` | A complete, reviewable PR |
-| `review-pr` | Requirement and quality review; evidence-based feedback handling |
-| `verify` | Deployment and runtime verification without code changes |
-| `ste-explain` | Clear explanations with precise evidence and conditions |
+| [create-linear-issue](skills/create-linear-issue/SKILL.md) | 코드와 근거를 조사해 Linear 이슈와 필요한 작업 단위 생성 |
+| [clarify](skills/clarify/SKILL.md) | 해결할 문제, 범위, 성공 기준 명확화 |
+| [implement](skills/implement/SKILL.md) | 계획 수립·검토, worktree 구현, 테스트와 PR 단계 연결 |
+| [smart-commit](skills/smart-commit/SKILL.md) | 변경 사항 분석, 커밋과 push |
+| [create-pr](skills/create-pr/SKILL.md) | 프로젝트 규칙에 맞는 PR 생성·갱신 |
+| [review-pr](skills/review-pr/SKILL.md) | 요구사항·코드 품질 검토와 받은 리뷰의 타당성 확인 |
+| [verify](skills/verify/SKILL.md) | 배포 확인과 운영 근거를 통한 완료 검증 |
+| [ste-explain](skills/ste-explain/SKILL.md) | 사실과 추정을 구분하는 명확한 설명 |
 
-A typical path is issue → clarify → implement → commit → PR → review → deployment → verify. Every skill is independently callable; this is not a mandatory pipeline. `ste-explain` can support any stage. Deployment itself follows the target project's process.
+일반적인 흐름은 다음과 같습니다. 모든 단계를 반드시 거칠 필요는 없습니다.
 
-## Install
+```text
+이슈 생성 → 문제 명확화 → 계획·구현 → 커밋 → PR → 리뷰 → 배포 → 검증
+```
 
-Choose one installation method per agent to avoid duplicate skills. No manual file copying is needed. Installing skills does not configure connectors or grant access to your services.
+`implement`는 요청 범위에 따라 `smart-commit`, `create-pr`, `review-pr`로 이어집니다. 배포는 프로젝트의 절차를 따르며, `ste-explain`은 어느 단계의 설명에도 함께 사용할 수 있습니다.
 
-### Codex and other agents: skills CLI
+## 스킬별 설명
 
-Run from the project where you want to use the skills:
+### create-linear-issue — 작업을 시작할 수 있는 이슈 만들기
+
+버그 제보나 기능 요청을 Linear에 등록할 때 사용합니다. 실제 코드와 관련 근거를 조사하고, 작업이 필요한 이유와 현재 상태, 범위, 성공 기준을 정리합니다. 구현 방법은 이후 계획과 PR에서 다룹니다.
+
+여러 시스템에 걸친 큰 작업은 각각 동작을 확인할 수 있는 작은 end-to-end 단위인 **버티컬 슬라이스**로 나눕니다. 각 슬라이스에는 범위, 검증 기준, 확인된 선행 의존성을 남깁니다. 기존 슬라이스가 있다면 재사용합니다.
+
+- **결과:** 조사 근거가 포함된 Linear 이슈와 필요한 하위 이슈의 링크
+- **예시 요청:** “이 오류 제보를 조사해서 Linear 이슈로 만들어줘.”
+- **필요한 연결:** 이슈 생성 권한이 있는 Linear 도구. 연결이 없으면 한계를 알리고 초안을 준비합니다.
+
+### clarify — 해결할 문제 명확히 하기
+
+제보나 이슈를 읽었지만 무엇을 해결해야 하는지, 어디까지 작업해야 하는지 불명확할 때 사용합니다. 기대 동작과 현재 동작, 영향받는 대상, 작업 범위와 성공 기준을 정리합니다.
+
+이미 합의된 내용은 다시 묻지 않습니다. 조사로 확인할 수 없는 중요한 판단만 작업자에게 질문합니다. 원인이 완전히 확정되지 않아도 해결할 문제와 성공 기준이 명확하면 구현 단계로 넘길 수 있습니다.
+
+- **결과:** 문제 정의, 범위, 성공 기준, 근거와 남은 결정 사항
+- **예시 요청:** “이 이슈에서 이번에 해결할 문제와 완료 기준을 정리해줘.”
+
+### implement — 계획부터 구현까지 진행하기
+
+해결할 문제가 정해졌을 때 사용합니다. 프로젝트 규칙과 코드를 읽고, 적절한 worktree에서 계획 수립·계획 검토·구현·테스트를 진행합니다. 계획과 주요 판단, 실행한 검사는 문서에 남겨 작업을 이어갈 수 있게 합니다.
+
+기존 이슈의 슬라이스와 의존성을 따릅니다. 계획에 확신이 부족하거나 어려운 구현·새로운 blocker로 작업자의 판단이 필요하면 근거와 선택지를 제시해 질문합니다. 요청받은 범위가 전체 작업 흐름을 포함하면 커밋, PR 생성, 리뷰까지 연결합니다.
+
+- **결과:** 구현된 변경, 계획 문서, 테스트 결과와 PR 또는 남은 단계
+- **예시 요청:** “이 슬라이스를 worktree에서 구현하고 테스트한 뒤 PR과 리뷰까지 진행해줘.”
+- **경계:** 로컬 구현만 요청했다면 그 범위를 지킵니다. 머지·배포를 자동으로 수행하지 않습니다.
+
+### smart-commit — 변경 이유를 남기고 커밋하기
+
+완료한 변경을 커밋할 때 사용합니다. staged·unstaged 변경과 관련 파일을 확인하고, 요청 범위에 해당하는 변경만 커밋합니다. 메시지에는 무엇을 왜 바꿨는지, 영향과 검증 결과, 필요한 rollback 정보를 남깁니다.
+
+기본 동작은 커밋과 push이며, “커밋만” 요청하면 push하지 않습니다. Git hook을 우회하지 않고, 보호 브랜치와 프로젝트 규칙을 따릅니다.
+
+- **결과:** 커밋 해시, 대상 브랜치와 push 결과
+- **예시 요청:** “이번 변경을 smart-commit으로 커밋하고 push해줘.”
+
+### create-pr — 리뷰 가능한 PR 만들기
+
+push한 브랜치로 PR을 만들거나 기존 PR 설명을 갱신할 때 사용합니다. 실제 원격 diff와 대상 브랜치를 확인하고, 프로젝트의 템플릿·언어·라벨·담당자·이슈 연결 규칙을 적용합니다.
+
+문제와 변경 후 동작을 먼저 설명하고, 리뷰에 필요한 구현 선택과 실제로 수행한 검사를 기록합니다. 같은 브랜치의 PR이 있는지 확인해 중복 생성을 피합니다.
+
+- **결과:** PR 링크, 비교한 커밋과 검증 한계
+- **예시 요청:** “push한 브랜치로 프로젝트 규칙에 맞춰 PR을 만들어줘.”
+- **경계:** PR 생성은 승인·머지·배포를 포함하지 않습니다.
+
+### review-pr — 요구사항과 코드 품질 검토하기
+
+PR이 요청한 문제를 해결하는지 먼저 확인하고, 그다음 정확성, 회귀 위험, 계약, 유지보수성과 테스트를 검토합니다. 프로젝트의 필수 리뷰 양식이 있으면 그대로 따릅니다. 발견 사항에는 근거 위치와 문제가 발생하는 조건, 영향을 적습니다.
+
+받은 리뷰를 처리할 때도 제안을 그대로 수용하지 않고 현재 코드와 요구사항에 맞는지 확인합니다. 수정이 필요하면 작업자가 선택한 대응 또는 이미 허용한 수정 범위에 따라 진행합니다.
+
+- **결과:** 근거가 있는 발견 사항, 검증 범위와 판정 또는 받은 피드백의 처리 결과
+- **예시 요청:** “이 PR이 이슈의 완료 기준을 충족하는지 리뷰해줘.”
+- **경계:** GitHub 리뷰 게시나 코드 수정은 해당 작업에 대한 권한이 있어야 진행합니다. 승인을 얻기 위한 무한 수정·리뷰 반복은 하지 않습니다.
+
+### verify — 배포된 결과 확인하기
+
+배포 후 기능이 완료 기준을 충족하는지 확인할 때 사용합니다. 먼저 PR이나 커밋이 목표 환경의 실제 실행 버전에 반영됐는지 추적합니다. 이후 로그, 오류 추적, 분석 이벤트 등 기존 근거로 동작을 확인합니다.
+
+에러가 없다는 사실만으로 성공을 선언하지 않습니다. 해당 경로가 실제로 실행됐는지와 관측 범위를 함께 확인합니다. AWS, GHA, EAS, Sentry, PostHog 등 특정 도구를 강제하지 않고 프로젝트 문서에 따라 접근합니다.
+
+- **결과:** 환경·배포 식별 정보·관측 기간·근거와 기준별 **통과 / 실패 / 검증 불가** 판정
+- **예시 요청:** “이 PR이 staging에 배포됐는지 확인하고 성공 기준을 검증해줘.”
+- **경계:** 코드·계측·설정을 수정하거나 배포하지 않습니다. 근거가 부족하면 필요한 로그·이벤트와 기대 검증 방법을 정리해 별도 구현 작업으로 넘깁니다. 알림 발송·결제 등 실제 영향을 주는 검증은 허용된 시나리오인지 확인합니다.
+
+### ste-explain — 판단할 수 있도록 설명하기
+
+기술 개념, 조사 결과, 구현 결과를 설명할 때 사용합니다. 결론을 먼저 말하고, 같은 개념에는 같은 용어를 쓰며, 조건과 근거를 명확히 합니다. 사실·추정·기대 효과를 구분하고 독자의 언어와 이해 수준에 맞춥니다.
+
+“테스트 통과”, “PR 생성”, “배포 완료”, “운영 동작 확인”을 서로 다른 상태로 설명합니다. 다른 스킬의 필수 출력 양식은 유지합니다. ASD-STE100의 원칙을 개발 설명에 응용하며, 공식 규격 준수를 주장하지 않습니다.
+
+- **결과:** 무엇이 확인됐고 무엇이 아직 불확실한지 알 수 있는 설명
+- **예시 요청:** “이 조사 결과를 비개발자도 판단할 수 있게 ste-explain으로 설명해줘.”
+
+## 설치
+
+동일한 에이전트에는 한 가지 설치 방식을 선택해 중복을 피하세요. 설치만으로 서비스 연결이나 접근 권한이 설정되지는 않습니다.
+
+### Codex 및 다른 에이전트: skills CLI
+
+스킬을 사용할 프로젝트에서 실행합니다.
 
 ```sh
 npx skills@latest add Metalingo/thetaone-skills
 ```
 
-The installer lets you select skills and target agents. With Bun, use `bunx skills@latest add Metalingo/thetaone-skills` instead. To preview or install a specific skill:
+설치할 스킬과 대상 에이전트를 선택할 수 있습니다. Bun을 사용한다면 `bunx skills@latest add Metalingo/thetaone-skills`로 실행할 수 있습니다.
+
+목록을 확인하거나 특정 스킬만 설치하려면 다음과 같이 실행합니다.
 
 ```sh
 npx skills@latest add Metalingo/thetaone-skills --list
 npx skills@latest add Metalingo/thetaone-skills --skill clarify --agent codex
 ```
 
-Add `--global` for user-level installation. Check for existing skills with the same names before installing. Use `npx skills check` and `npx skills update` to check and apply available updates; the update command can affect other skills managed by that installer too.
+사용자 전체 범위로 설치하려면 `--global`을 추가합니다. 기존에 같은 이름의 스킬이 있는지 먼저 확인하세요. 업데이트 확인은 `npx skills check`, 적용은 `npx skills update`를 사용합니다. 업데이트 명령은 해당 도구로 관리하는 다른 스킬에도 영향을 줄 수 있습니다.
 
-### Claude Code: marketplace plugin
+### Claude Code: marketplace 플러그인
 
-Inside Claude Code:
+Claude Code 세션에서 실행합니다.
 
 ```text
 /plugin marketplace add Metalingo/thetaone-skills
 /plugin install thetaone-skills@thetaone
 ```
 
-This installs all eight skills as one plugin. Start a new session after installation. Plugin commands are namespaced, for example `/thetaone-skills:clarify` and `/thetaone-skills:implement`; the underlying skill names remain unchanged.
+8개 스킬이 하나의 플러그인으로 설치됩니다. 설치 후 새 세션을 시작하세요. 호출 시 `/thetaone-skills:clarify`, `/thetaone-skills:implement`처럼 플러그인 이름이 앞에 붙으며, 스킬 자체의 이름은 바뀌지 않습니다.
 
-To refresh the marketplace and update the plugin from a terminal:
+터미널에서 marketplace와 플러그인을 업데이트하려면 다음 명령을 사용합니다.
 
 ```sh
 claude plugin marketplace update thetaone
 claude plugin update thetaone-skills@thetaone
 ```
 
-This is a self-hosted marketplace on GitHub, not an official Anthropic directory listing. An official listing requires a separate submission and acceptance. Codex users can use the skills CLI; this repository does not yet ship a native Codex plugin.
+현재는 GitHub에서 직접 제공하는 marketplace입니다. Anthropic 공식 디렉터리 등재에는 별도 제출과 승인이 필요합니다. Codex용 네이티브 플러그인은 아직 제공하지 않으며, skills CLI로 설치할 수 있습니다.
 
-## Distribution and releases
+## 프로젝트에서 준비할 문서와 연결
 
-The skill files under `skills/` are the single source for both installation methods. The Claude manifest declares the plugin version; bump it for published plugin changes. Validate, commit, push, then tag the same commit for a release. Do not label a version behavior-tested until representative tasks have been evaluated.
+스킬은 대상 프로젝트의 지침과 기존 문서를 읽습니다. 사용하는 단계에 필요한 정보만 준비하면 됩니다.
 
-For a pinned skills installation, use the published tag's GitHub tree URL instead of the default branch. Only reference tags that actually exist. A public repository is not an official marketplace endorsement, and directory/search indexing is separate from direct installation.
+| 영역 | 필요한 정보 |
+| --- | --- |
+| 이슈 | 조사 기준 브랜치, Linear 팀·프로젝트와 이슈 작성 규칙 |
+| 구현 | worktree 설정·의존성 설치 명령, 계획 저장 위치, 필수 검사와 검토 절차 |
+| Git·PR | 보호·기준 브랜치, 커밋 규칙, PR 템플릿·라벨·담당자·이슈 연결 방식 |
+| 배포 검증 | 환경 구분, 배포 버전과 반영 여부를 확인하는 방법, 로그·이벤트 위치와 성공 기준 |
 
-Before broad redistribution, the maintainer should choose and add a license; this initial repository does not yet grant an explicit open-source license.
+기존 문서를 재사용하면 되며, Thetaone 전용 파일명을 만들 필요는 없습니다. Linear 이슈 생성에는 Linear 접근 권한, PR 생성에는 Git 호스팅 접근 권한, 배포 검증에는 해당 프로젝트의 배포·관측 도구 접근 권한이 필요합니다.
 
-Installation references: [skills CLI](https://github.com/vercel-labs/skills), [Claude marketplaces](https://code.claude.com/docs/en/plugin-marketplaces).
+작업자의 판단이 필요한 경우 질문 도구를 사용하고, 해당 도구가 없으면 대화로 질문합니다. 설치 자체가 외부 시스템 변경, 머지, 배포 또는 실제 데이터에 영향을 주는 테스트를 허용하는 것은 아닙니다.
 
-## Project setup
+## 배포와 버전 관리
 
-The skills read the target project's instructions and existing documents. Supply only what the workflow needs:
+두 설치 방식 모두 `skills/`의 동일한 파일을 사용합니다. Claude 플러그인 버전은 `.claude-plugin/plugin.json`에서 관리합니다. 플러그인 변경을 배포할 때 버전을 올리고, 검증·커밋·push 후 같은 커밋에 릴리스 태그를 붙입니다.
 
-- Issue workflow: investigation base, Linear destination and issue conventions.
-- Implementation: worktree/setup commands, plan location, required checks, and review gates.
-- Git and PR workflow: protected/base branches, commit rules, PR template, labels, assignee, and issue-link syntax.
-- Verification: environment mapping, deployment identity and rollout checks, telemetry locations, and success criteria.
+특정 버전을 고정해 skills CLI로 설치하려면 기본 브랜치 대신 실제로 배포된 태그의 GitHub tree URL을 사용합니다. 저장소 공개, 직접 설치 가능 여부, 디렉터리 검색 노출과 공식 등재는 각각 별개입니다.
 
-Reuse existing documentation; no Thetaone-specific filenames are required. Linear access is needed to publish issues, Git hosting access to publish PRs, and the project's deployment/observability access to verify releases. `verify` reports **unable to verify** when evidence or access is insufficient. It does not require AWS, GitHub Actions, EAS, Sentry, or PostHog specifically.
+**라이선스는 아직 정하지 않았습니다.** 외부 재배포를 확대하기 전에 유지관리자가 라이선스를 선택해 추가해야 합니다.
 
-Skills ask the worker when a decision changes scope or requires judgment. They use a question tool when available, with a chat fallback. Existing authorization is preserved; installation alone does not authorize external writes, merge, deployment, or real-world test side effects.
+설치 방식의 원문은 [skills CLI](https://github.com/vercel-labs/skills)와 [Claude marketplace 문서](https://code.claude.com/docs/en/plugin-marketplaces)를 참고하세요.
 
-## Maintenance
+## 유지보수와 검증
 
-Keep entrypoints short. Put provider-specific commands in the consuming project's documentation rather than these shared skills. Validate local files with:
+스킬 본문은 짧게 유지하고, 프로젝트별 도구 명령은 해당 프로젝트 문서에 둡니다. 파일 형식과 플러그인 구성을 확인하려면 다음 명령을 실행합니다.
 
 ```sh
 bun run validate
 claude plugin validate .
 ```
 
-The check validates packaging and frontmatter, not agent behavior. These are initial drafts; evaluate them on real tasks before treating their outcomes as proven. No external issue, PR, payment, notification, or deployment is created by validation.
+이 검사는 파일 구조와 메타데이터를 확인하며, 에이전트의 실제 판단이나 작업 수행 품질을 검증하지 않습니다. 현재 스킬은 초기 버전이므로 대표적인 실제 작업으로 평가하며 개선해야 합니다. 검증 명령이 외부 이슈·PR을 생성하거나 결제·알림·배포를 실행하지는 않습니다.
 
-## Origins
+## 제작 배경
 
-`create-linear-issue`, `smart-commit`, `review-pr`, and `ste-explain` adapt Thetaone's existing language-pilot skills. `clarify`, `implement`, `verify`, and `create-pr` were developed from the team's agreed workflow. External skill collections informed the discussion; their source files are not vendored here. `ste-explain` adapts plain-language principles and does not claim formal ASD-STE100 compliance.
+`create-linear-issue`, `smart-commit`, `review-pr`, `ste-explain`은 Thetaone의 기존 language-pilot 스킬을 바탕으로 일반화했습니다. `clarify`, `implement`, `verify`, `create-pr`은 팀에서 합의한 작업 흐름을 바탕으로 작성했습니다. 외부 스킬 모음은 논의에 참고했으며, 해당 저장소의 소스 파일을 그대로 포함하지는 않았습니다.
