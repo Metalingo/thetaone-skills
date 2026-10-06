@@ -1,0 +1,16 @@
+{
+  "name": "thetaone",
+  "owner": {
+    "name": "Thetaone"
+  },
+  "plugins": [
+    {
+      "name": "thetaone-skills",
+      "source": "./",
+      "description": "Composable skills for evidence-based development: clarify, implement, review, and verify."
+    }
+  ],
+  "metadata": {
+    "description": "Thetaone development workflow skills"
+  }
+}

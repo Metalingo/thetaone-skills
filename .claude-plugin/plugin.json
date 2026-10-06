@@ -1,0 +1,10 @@
+{
+  "name": "thetaone-skills",
+  "version": "0.1.0",
+  "description": "Composable skills for evidence-based development: clarify, implement, review, and verify.",
+  "author": {
+    "name": "Thetaone"
+  },
+  "homepage": "https://github.com/Metalingo/thetaone-skills",
+  "repository": "https://github.com/Metalingo/thetaone-skills"
+}

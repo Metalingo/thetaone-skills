@@ -17,27 +17,54 @@ A typical path is issue → clarify → implement → commit → PR → review �
 
 ## Install
 
-Clone this private repository with an account that has access:
+Choose one installation method per agent to avoid duplicate skills. No manual file copying is needed. Installing skills does not configure connectors or grant access to your services.
+
+### Codex and other agents: skills CLI
+
+Run from the project where you want to use the skills:
 
 ```sh
-git clone https://github.com/Metalingo/thetaone-skills.git
+npx skills@latest add Metalingo/thetaone-skills
 ```
 
-Each directory under `skills/` is a standalone skill whose entrypoint is `SKILL.md`. Install or copy the selected directories into the skill location supported by your agent. Keep the entire directory together. For Codex, a user-level example is:
+The installer lets you select skills and target agents. With Bun, use `bunx skills@latest add Metalingo/thetaone-skills` instead. To preview or install a specific skill:
 
 ```sh
-mkdir -p ~/.codex/skills
-cp -R thetaone-skills/skills/clarify ~/.codex/skills/
+npx skills@latest add Metalingo/thetaone-skills --list
+npx skills@latest add Metalingo/thetaone-skills --skill clarify --agent codex
 ```
 
-For Claude Code, a user-level example is:
+Add `--global` for user-level installation. Check for existing skills with the same names before installing. Use `npx skills check` and `npx skills update` to check and apply available updates; the update command can affect other skills managed by that installer too.
+
+### Claude Code: marketplace plugin
+
+Inside Claude Code:
+
+```text
+/plugin marketplace add Metalingo/thetaone-skills
+/plugin install thetaone-skills@thetaone
+```
+
+This installs all eight skills as one plugin. Start a new session after installation. Plugin commands are namespaced, for example `/thetaone-skills:clarify` and `/thetaone-skills:implement`; the underlying skill names remain unchanged.
+
+To refresh the marketplace and update the plugin from a terminal:
 
 ```sh
-mkdir -p ~/.claude/skills
-cp -R thetaone-skills/skills/clarify ~/.claude/skills/
+claude plugin marketplace update thetaone
+claude plugin update thetaone-skills@thetaone
 ```
 
-Check for an existing skill with the same name before copying; do not overwrite customizations unintentionally. Install the other directories the same way. Invoke a skill by its name through your agent's skill interface. Installing these files does not configure connectors or grant access.
+This is a self-hosted marketplace on GitHub, not an official Anthropic directory listing. An official listing requires a separate submission and acceptance. Codex users can use the skills CLI; this repository does not yet ship a native Codex plugin.
+
+## Distribution and releases
+
+The skill files under `skills/` are the single source for both installation methods. The Claude manifest declares the plugin version; bump it for published plugin changes. Validate, commit, push, then tag the same commit for a release. Do not label a version behavior-tested until representative tasks have been evaluated.
+
+For a pinned skills installation, use the published tag's GitHub tree URL instead of the default branch. Only reference tags that actually exist. A public repository is not an official marketplace endorsement, and directory/search indexing is separate from direct installation.
+
+Before broad redistribution, the maintainer should choose and add a license; this initial repository does not yet grant an explicit open-source license.
+
+Installation references: [skills CLI](https://github.com/vercel-labs/skills), [Claude marketplaces](https://code.claude.com/docs/en/plugin-marketplaces).
 
 ## Project setup
 
@@ -58,6 +85,7 @@ Keep entrypoints short. Put provider-specific commands in the consuming project'
 
 ```sh
 bun run validate
+claude plugin validate .
 ```
 
 The check validates packaging and frontmatter, not agent behavior. These are initial drafts; evaluate them on real tasks before treating their outcomes as proven. No external issue, PR, payment, notification, or deployment is created by validation.
