@@ -25,7 +25,7 @@ Persist a concise plan in the project's designated location, or `docs/plan/` if 
 
 Review the plan against the ticket, current contracts, failure behavior, and testability, then proceed. Do not introduce a worker approval gate merely because planning is complete, implementation is difficult, or confidence needs improvement. Investigate uncertainties with available code, documents, and focused experiments.
 
-Implement the ticket's scope. For bugs, reproduce the failure before fixing it when feasible. Run required checks and focused behavior tests. Fix routine implementation and test failures without asking the worker to choose ordinary technical details. Do not weaken tests or bypass hooks. Update affected documentation and keep the plan's decisions and check results current.
+Implement the ticket's scope. For bugs, reproduce the failure before fixing it when feasible. Run required checks and focused behavior tests. Fix routine implementation and test failures without asking the worker to choose ordinary technical details. Do not weaken tests or bypass hooks. Update affected documentation and keep the plan's decisions and check results current. After subsequent edits, rerun the checks affected by those edits before claiming success or handing off for commit. Record the commands, outcomes, and code revision or working-tree state they verified; do not reuse an earlier pass as evidence for changed behavior. Reuse unaffected results rather than rerunning everything without cause.
 
 ## When to pause
 
@@ -40,7 +40,7 @@ Routine technical uncertainty and stage transitions are not blockers. Actual acc
 Load and invoke the installed skills in this order without another end-to-end request:
 
 1. `smart-commit`: pass the ticket or slice, worktree, branch, base, plan, intended changes, and check results. Complete commit, push, and PR creation or update. Confirm the returned PR and compared commit before continuing.
-2. `review-pr`: pass the PR and ticket acceptance criteria. Complete the review and report its findings and verdict. This step is part of the task, not an optional suggestion after PR creation.
+2. `review-pr`: pass the PR and ticket acceptance criteria. Complete the review and report its findings and verdict. This step is part of the task, not an optional suggestion after PR creation. Report defects found in the first PR review to the worker, including straightforward omissions or typos; do not silently repair them and replace the original verdict with a passing review. Await the worker's response unless a response to those findings was already explicitly authorized.
 
 When called here, these skills are stages of this workflow; their standalone stopping points do not end `implement`. If a skill is unavailable, follow the equivalent project procedure and disclose the fallback. Do not invent a successful commit, PR, or review. Do not start an indefinite fix/review loop to obtain approval.
 

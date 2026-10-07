@@ -9,11 +9,13 @@ description: Review a pull request for requirement compliance and code quality, 
 
 When explaining findings or asking the worker a question, use the installed `ste-explain` skill through the environment's skill mechanism, or read its SKILL.md if no invocation tool exists. Load it once and apply it alongside this workflow, preserving required templates. If it is unavailable, keep terms consistent, put conditions before actions, and distinguish evidence from assumptions; do not block the task on installation.
 
-Read the target repository's review guidelines and required template. Identify the actual PR base and head, issue acceptance criteria, and diff. Review surrounding code and relevant tests rather than relying on the author's summary.
+Read the target repository's review guidelines and required template. Identify the actual PR base and head and locate acceptance criteria through the project's documented issue or specification workflow; do not assume Linear or any particular tracker. At review start, record the comparison baseline and head SHA, and identify the reviewed commit in the result. Review surrounding code and relevant tests rather than relying on the author's summary.
 
 ## Review a PR
 
-First check requirement compliance: does the change solve the requested problem and satisfy the slice's observable criteria without expanding scope? Then check correctness, regressions, contracts, maintainability, and relevant test coverage. Scale scrutiny to the change.
+If the ticket or specification cannot be obtained, continue the code-quality review but report requirement compliance as unverified, not passed.
+
+First check requirement compliance when its source is available: does the change solve the requested problem and satisfy the slice's observable criteria without expanding scope? Then check correctness, regressions, contracts, maintainability, and relevant test coverage. Scale scrutiny to the change.
 
 Use a fresh review context or an independent subagent when available and authorized; otherwise review in the current session and reassess assumptions from source evidence. Never claim an independent review when none occurred.
 
