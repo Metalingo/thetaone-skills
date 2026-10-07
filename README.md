@@ -23,7 +23,11 @@ Thetaone의 개발 방식을 공유하기 위한 AI 에이전트 스킬 모음�
 이슈 생성 → 문제 명확화 → 계획·구현 → 커밋 → PR → 리뷰 → 배포 → 검증
 ```
 
-`implement`는 요청 범위에 따라 `smart-commit`, `create-pr`, `review-pr`로 이어집니다. 배포는 프로젝트의 절차를 따르며, `ste-explain`은 어느 단계의 설명에도 함께 사용할 수 있습니다.
+`clarify`는 요청에 따라 `implement` 또는 `create-linear-issue`로 이어집니다. `implement`는 허용된 전체 작업에서 `smart-commit` → `create-pr` → `review-pr`를 호출하고, 배포 후 `verify`를 안내합니다. worktree 사용은 특정 프로젝트에 한정되지 않는 `implement`의 공통 원칙입니다.
+
+`create-linear-issue`, `smart-commit`, `create-pr`, `review-pr`를 단독 호출하면 각자의 결과를 보고하고 종료합니다. 이후 행동은 작업자가 정합니다. `verify`에서 관측 보완 구현이 필요하면 `create-linear-issue`로 후속 이슈를 만들고 검증 결과와 함께 보고합니다. 읽기 전용 요청이나 프로젝트 승인 규칙은 우선합니다.
+
+각 스킬은 설명이나 질문이 필요할 때 `ste-explain`을 함께 사용합니다. 선택 설치로 필요한 스킬이 없다면 이를 알리고, 가능한 대체 절차나 전달할 정보를 제공합니다.
 
 ## 스킬별 설명
 

@@ -5,6 +5,10 @@ description: Verify that a specified change reached the intended environment and
 
 # Verify
 
+## Communication
+
+When explaining findings or asking the worker a question, use the installed `ste-explain` skill through the environment's skill mechanism, or read its SKILL.md if no invocation tool exists. Load it once and apply it alongside this workflow, preserving required templates. If it is unavailable, keep terms consistent, put conditions before actions, and distinguish evidence from assumptions; do not block the task on installation.
+
 Determine whether a deployed change works. Do not edit product code, add instrumentation, change configuration, deploy, or repair the implementation through this skill.
 
 ## Locate the deployed change
@@ -25,4 +29,12 @@ If access, collection delay, sampling, or missing events prevents a supported co
 
 For each criterion, report **passed**, **failed**, or **unable to verify**, with its evidence and limitation. Overall: failed if a criterion has contrary evidence; otherwise unable to verify if any required criterion lacks evidence; passed only when all required criteria are supported.
 
-Report release identity, environment, observation window, and relevant evidence links. When implementation or instrumentation is needed, describe the missing evidence, required logs/events, and expected verification method. Hand off through `create-linear-issue` when requested and available, or provide an issue-ready summary. Never fix it within this skill. Do not close an issue merely because no errors were found.
+Report release identity, environment, observation window, and relevant evidence links. Do not close an issue merely because no errors were found.
+
+## Observability follow-up
+
+When verification requires new or corrected instrumentation, invoke the installed `create-linear-issue` skill and follow its investigation and duplicate-check workflow to create the follow-up issue. This is the defined follow-up for this verification workflow; do not ask for redundant confirmation when issue creation is already authorized. An explicit read-only/no-issue request or project approval rule takes precedence.
+
+Pass the original issue or PR, environment and release, failed or unverified criterion, observed evidence, missing logs/events, and the expected verification method. Return the created issue link with the verdict; creating an issue does not turn an unverified result into a pass. Do not implement the change or automatically continue to `implement`.
+
+If the issue skill or Linear access is unavailable, or a necessary destination decision is unresolved, preserve an issue-ready handoff and state the blocker. Missing access or a collection delay alone does not justify an instrumentation issue; create one when evidence shows implementation is needed. Other confirmed product failures should be reported with their evidence for the worker's next decision.

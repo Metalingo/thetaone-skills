@@ -5,6 +5,10 @@ description: Investigate a reported problem and create a self-contained Linear i
 
 # Create Linear Issue
 
+## Communication
+
+When explaining findings or asking the worker a question, use the installed `ste-explain` skill through the environment's skill mechanism, or read its SKILL.md if no invocation tool exists. Load it once and apply it alongside this workflow, preserving required templates. If it is unavailable, keep terms consistent, put conditions before actions, and distinguish evidence from assumptions; do not block the task on installation.
+
 Create a ticket another worker can start from: why the work matters, the confirmed current state, scope, and observable success. Implementation choices belong in the implementation plan and PR.
 
 ## Investigate
@@ -25,4 +29,4 @@ Discover available Linear tools and current workspace metadata. Resolve the team
 
 Search for an existing matching issue before creation. The user's request to create an issue authorizes the issue and necessary slice creation; do not add a redundant approval step. Read back created issues and relationships. If a response times out, search for the attempted issue before retrying to avoid duplicates. Stop on permission or authentication failures and retain the draft.
 
-Return issue IDs and links, destination, and slice dependencies. This skill does not start implementation or post messages elsewhere.
+Return issue IDs and links, destination, and slice dependencies. When called directly, stop after this report and leave the next action to the worker. Do not automatically invoke clarification or implementation. When called from another skill, return the issue links to that caller.

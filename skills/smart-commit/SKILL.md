@@ -5,6 +5,10 @@ description: Inspect the requested changes, create a traceable Git commit, and p
 
 # Smart Commit
 
+## Communication
+
+When explaining findings or asking the worker a question, use the installed `ste-explain` skill through the environment's skill mechanism, or read its SKILL.md if no invocation tool exists. Load it once and apply it alongside this workflow, preserving required templates. If it is unavailable, keep terms consistent, put conditions before actions, and distinguish evidence from assumptions; do not block the task on installation.
+
 Default scope is commit and push. Honor an explicit commit-only request and project authorization rules.
 
 1. Read repository commit rules and inspect status, staged and unstaged diffs, relevant untracked files, and recent commit style. Establish the intended branch and remote. Exclude unrelated work, credentials, generated clutter, and local configuration.
@@ -17,3 +21,5 @@ Default scope is commit and push. Honor an explicit commit-only request and proj
 Do not force push, rewrite others' work, bypass branch rules, or switch authentication methods to evade a failure. On a rejected push, inspect remote divergence and preserve local work; ask when resolution needs a history or scope decision. Use only permission options supported by the current environment.
 
 PR creation is a separate `create-pr` action. Do not merge or deploy as part of a commit request.
+
+When called directly, stop after reporting the commit and push result. When called by `implement`, return that result so the caller can continue; do not invoke `create-pr` yourself.

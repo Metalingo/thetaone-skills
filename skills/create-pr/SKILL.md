@@ -5,6 +5,10 @@ description: Create or update a pull request for a pushed branch when the user a
 
 # Create PR
 
+## Communication
+
+When explaining findings or asking the worker a question, use the installed `ste-explain` skill through the environment's skill mechanism, or read its SKILL.md if no invocation tool exists. Load it once and apply it alongside this workflow, preserving required templates. If it is unavailable, keep terms consistent, put conditions before actions, and distinguish evidence from assumptions; do not block the task on installation.
+
 Turn a pushed change into a reviewable PR. Commit and push belong to `smart-commit`; review belongs to `review-pr`. Use those skills only when available and authorized by the requested workflow.
 
 ## Establish the change
@@ -27,4 +31,4 @@ Turn a pushed change into a reviewable PR. Commit and push belong to `smart-comm
 - Recheck the remote head before publication. If it changed, inspect the new diff and refresh the description and validation claims first. Never overwrite another contributor's branch to restore an earlier snapshot.
 - If creation times out or returns an ambiguous result, query existing PRs before retrying. Stop and report unresolved authentication, permission, or policy failures; do not bypass checks.
 - Verify the returned PR's head, base, title/body, and required metadata. Attach the PR to the current task when the environment supports it.
-- Report the PR link, compared commit, and material verification gaps. Do not approve, merge, enable auto-merge, or deploy as part of this skill. Continue to `review-pr` only when the requested workflow includes review.
+- Report the PR link, compared commit, and material verification gaps. Do not approve, merge, enable auto-merge, or deploy as part of this skill. When called directly, stop after the PR report. When called by `implement`, return the PR and compared commit so that caller can invoke `review-pr`; do not invoke it yourself.
