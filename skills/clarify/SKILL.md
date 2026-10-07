@@ -22,7 +22,8 @@ Output the problem, scope, success criteria, evidence, and only the unresolved d
 
 ## Next steps
 
-- If the problem is clear and implementation is requested, invoke `implement`. Pass the agreed problem, scope, success criteria, evidence, and relevant issue or plan reference.
+- If the problem is clear, an existing ticket identifies the work, and implementation is requested, invoke `implement`. Pass the agreed problem, scope, success criteria, evidence, and relevant issue or plan reference.
+- If implementation is requested but no ticket exists, explain that `implement` needs one and offer `create-linear-issue`; do not invent or silently publish a ticket.
 - If the worker wants the clarified work registered as an issue, invoke `create-linear-issue` with the same handoff. Reuse the investigation rather than repeating the interview.
 - If only clarification was requested, report the result and stop. When the desired continuation is genuinely unclear, offer implementation or issue creation as the relevant choices and ask once. Continue within existing authorization without asking again.
 

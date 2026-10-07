@@ -1,46 +1,51 @@
 ---
 name: implement
-description: Plan, review the plan, and implement a defined change in a Git worktree, then complete appropriate checks and the authorized commit and PR workflow.
+description: Implement an existing Linear issue or equivalent ticket in a Git worktree, then complete tests, commit, push, PR creation, and PR review as the default workflow.
 ---
 
 # Implement
+
+Take an existing ticket through planning, implementation, checks, `smart-commit` (commit, push, PR), and `review-pr`. Invoking this skill requests the whole workflow; do not ask for separate permission at each stage. Merge and deployment are outside this workflow.
 
 ## Communication
 
 When explaining findings or asking the worker a question, use the installed `ste-explain` skill through the environment's skill mechanism, or read its SKILL.md if no invocation tool exists. Load it once and apply it alongside this workflow, preserving required templates. If it is unavailable, keep terms consistent, put conditions before actions, and distinguish evidence from assumptions; do not block the task on installation.
 
-Own planning, plan review, implementation, and local verification as one workflow. Adapt depth to the change.
+## Start from the ticket
 
-## Establish the work
+Read the referenced ticket, acceptance criteria, linked evidence, and relevant project instructions and code. Resolve a ticket already supplied in conversation without asking again. If no ticket can be identified, request its link or identifier; do not invent scope or silently create a ticket. This is required input, not an approval gate.
 
-Read project instructions, the issue or clarified problem, and relevant code. Reuse the issue's slices and dependencies; do not create a parallel dependency scheme. Select the requested slice. Confirm a real unmet prerequisite before declaring it blocked. Continue independent work when possible.
+Use the ticket's existing slices and dependencies. Work on the selected ticket or slice without creating a second breakdown or dependency scheme.
 
-Use a suitable existing worktree or create one from the latest project-designated base. Use managed worktree tools when available. Record the base revision and keep unrelated work intact. Follow project setup instructions.
+Use a suitable existing Git worktree or create one from the latest project-designated base. Use managed worktree tools when available. Record the ticket, worktree, branch, and base revision. Preserve unrelated work and follow project setup instructions. Worktrees are part of this skill across projects, not a language-pilot-specific convention.
 
-## Plan and challenge
+## Plan, review, and implement
 
-Persist a short plan in the project's designated location, or `docs/plan/` when none exists. Include the outcome, affected boundaries, implementation approach, meaningful checks, and material uncertainties. Reuse an existing plan when appropriate.
+Persist a concise plan in the project's designated location, or `docs/plan/` if none exists. Reuse an existing plan. Include the intended outcome, affected boundaries, approach, and meaningful checks.
 
-Review the plan against the acceptance criteria, current contracts, failure behavior, and testability. Compare alternatives only when the choice matters. If confidence is insufficient, implementation is difficult enough to require worker judgment, or a new blocker changes scope, ask with concrete evidence, options, and a recommendation. Use a user-question tool if available. Follow required project review gates; existing authorization should not trigger repeated confirmation.
+Review the plan against the ticket, current contracts, failure behavior, and testability, then proceed. Do not introduce a worker approval gate merely because planning is complete, implementation is difficult, or confidence needs improvement. Investigate uncertainties with available code, documents, and focused experiments.
 
-## Execute and verify
+Implement the ticket's scope. For bugs, reproduce the failure before fixing it when feasible. Run required checks and focused behavior tests. Fix routine implementation and test failures without asking the worker to choose ordinary technical details. Do not weaken tests or bypass hooks. Update affected documentation and keep the plan's decisions and check results current.
 
-Implement the agreed scope. For bugs, reproduce the failure before fixing it when feasible. Prefer focused behavior tests; apply project-required checks. Investigate failures rather than weakening tests or bypassing hooks. Update affected operational documentation when behavior or usage changes.
+## When to pause
 
-If evidence invalidates the plan, revise the affected decision and ask only when the worker must choose. Do not silently broaden the issue or work around an unmet dependency.
+The workflow's decision-blocking condition is new evidence that changes the agreed work: a newly discovered fact, or an assumption or supporting evidence shown to be wrong. Pause the affected work when this changes scope, acceptance criteria, dependencies, or the viability of the approach and requires a worker decision. Do not silently expand scope or continue on a disproven premise.
 
-## Finish
+Explain the new fact, the previous assumption, its impact, and the recommended next step. Use a user-question tool when available; otherwise ask in chat. Continue independent work that does not depend on the answer. Resume when the decision is resolved.
 
-Record the worktree, branch, base revision, material decisions, check results, and remaining limits in the plan. Keep this brief enough to resume from.
+Routine technical uncertainty and stage transitions are not blockers. Actual access or tool failures must still be reported truthfully: attempt an available authorized alternative, and preserve completed work if execution is impossible. This skill does not override explicit user limits or higher-priority repository rules.
 
-## Delivery flow
+## Deliver by default
 
-For an authorized end-to-end delivery request, invoke the installed skills in order, loading each skill's instructions rather than merely imitating its name:
+Load and invoke the installed skills in this order without another end-to-end request:
 
-1. `smart-commit`: pass the worktree, branch, intended changes, and check results. Confirm the pushed commit before continuing.
-2. `create-pr`: pass the pushed branch and commit, base, issue or slice, plan, and verification results. Reuse an existing matching PR.
-3. `review-pr`: pass the PR and originating acceptance criteria. Report its verdict and let the worker decide any new response; do not start an approval-chasing loop.
+1. `smart-commit`: pass the ticket or slice, worktree, branch, base, plan, intended changes, and check results. Complete commit, push, and PR creation or update. Confirm the returned PR and compared commit before continuing.
+2. `review-pr`: pass the PR and ticket acceptance criteria. Complete the review and report its findings and verdict. This step is part of the task, not an optional suggestion after PR creation.
 
-These skills remain standalone when called directly; this workflow owns their sequencing. A local-only request or a project approval gate takes precedence. If a required skill is unavailable, follow the equivalent project procedure within existing authorization and disclose the fallback; otherwise report the exact blocked step. Do not merge or deploy without authorization.
+When called here, these skills are stages of this workflow; their standalone stopping points do not end `implement`. If a skill is unavailable, follow the equivalent project procedure and disclose the fallback. Do not invent a successful commit, PR, or review. Do not start an indefinite fix/review loop to obtain approval.
 
-Report changed behavior, checks actually run, and the PR or pending step. Explain that `verify` is the next check after deployment to the intended environment, passing the PR or release identity and success criteria. Invoke it only when release verification is included in the request and deployment is ready; otherwise leave that action to the worker. Do not poll indefinitely for deployment. Local tests and PR approval do not establish deployment success.
+## Completion
+
+Complete the task by reporting the ticket, PR, commit, checks, review verdict, and material remaining findings. Record the handoff in the plan. Do not claim completion after local edits or tests alone, and do not equate a completed review with an approval.
+
+After the project's deployment process, recommend `verify` with the PR or release identity, target environment, and acceptance criteria. Do not wait for, trigger, or verify deployment as part of the default workflow.

@@ -1,15 +1,6 @@
----
-name: create-pr
-description: Create or update a pull request for a pushed branch when the user asks to open a PR or prepare an existing PR for review. Follow the target repository's PR conventions.
----
+# Pull Request
 
-# Create PR
-
-## Communication
-
-When explaining findings or asking the worker a question, use the installed `ste-explain` skill through the environment's skill mechanism, or read its SKILL.md if no invocation tool exists. Load it once and apply it alongside this workflow, preserving required templates. If it is unavailable, keep terms consistent, put conditions before actions, and distinguish evidence from assumptions; do not block the task on installation.
-
-Turn a pushed change into a reviewable PR. Commit and push belong to `smart-commit`; review belongs to `review-pr`. Use those skills only when available and authorized by the requested workflow.
+Use after commit and push, or for a PR-only request on an already pushed branch.
 
 ## Establish the change
 
@@ -31,4 +22,4 @@ Turn a pushed change into a reviewable PR. Commit and push belong to `smart-comm
 - Recheck the remote head before publication. If it changed, inspect the new diff and refresh the description and validation claims first. Never overwrite another contributor's branch to restore an earlier snapshot.
 - If creation times out or returns an ambiguous result, query existing PRs before retrying. Stop and report unresolved authentication, permission, or policy failures; do not bypass checks.
 - Verify the returned PR's head, base, title/body, and required metadata. Attach the PR to the current task when the environment supports it.
-- Report the PR link, compared commit, and material verification gaps. Do not approve, merge, enable auto-merge, or deploy as part of this skill. When called directly, stop after the PR report. When called by `implement`, return the PR and compared commit so that caller can invoke `review-pr`; do not invoke it yourself.
+- Report the PR link, compared commit, and material verification gaps. Do not approve, merge, enable auto-merge, or deploy as part of this skill. Return the PR and compared commit to the smart-commit workflow; do not invoke review yourself.
