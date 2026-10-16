@@ -98,6 +98,28 @@ Linear 이슈 같은 기존 작업 티켓을 전달하면 **계획·구현·테�
 
 ### Codex 및 다른 에이전트
 
+#### 기존 스킬을 유지하면서 Codex에서 테스트하기
+
+기존 `smart-commit`, `review-pr` 등과 구분해서 사용하려면 저장소를 프로젝트 밖에 내려받고 아래 명령을 실행하세요. Python 3이 필요합니다.
+
+```sh
+git clone https://github.com/Metalingo/thetaone-skills.git ~/thetaone-skills
+cd ~/thetaone-skills
+python3 scripts/install-codex-test.py
+```
+
+이미 저장소가 있다면 해당 폴더에서 마지막 명령만 실행하세요. 7개 스킬을 사용자 폴더 `~/.agents/skills/tto-*`에 설치하며, 원본과 기존 스킬은 변경하지 않습니다. 스킬 내부의 연결도 테스트 이름으로 바꿉니다. 같은 이름의 설치본이 이미 있으면 덮어쓰지 않고 중단합니다.
+
+다음 대화에서 `$tto-clarify`, `$tto-implement`처럼 선택하세요. 목록에 보이지 않으면 Codex를 재시작하세요.
+
+```text
+$tto-implement 이 이슈를 작업해줘: [이슈 링크]
+```
+
+일반 설치와 달리 테스트 사본은 원본 수정이나 `skills update`로 자동 갱신되지 않습니다. 재설치하려면 기존 `tto-*` 설치본을 별도로 백업하거나 이동한 뒤 다시 실행하세요. 이 설치는 실행 환경을 격리하지 않습니다. 실제 작업은 프로젝트 규칙과 연결된 도구 권한을 따릅니다.
+
+#### 일반 설치
+
 스킬을 사용할 프로젝트의 터미널에서 실행합니다.
 
 ```sh

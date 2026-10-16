@@ -1,0 +1,3 @@
+interface:
+  display_name: "tto-review-pr"
+  short_description: "PR의 요구사항 충족 여부와 코드 품질을 함께 검토"

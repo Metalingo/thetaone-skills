@@ -1,0 +1,3 @@
+interface:
+  display_name: "tto-create-linear-issue"
+  short_description: "제보를 조사하고 검증 가능한 작업을 Linear에 등록"

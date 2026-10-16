@@ -1,0 +1,3 @@
+interface:
+  display_name: "tto-verify"
+  short_description: "배포된 변경의 실제 동작을 로그와 실행 근거로 검증"
