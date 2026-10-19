@@ -157,10 +157,10 @@ Claude Code 대화창에서 차례로 실행합니다.
 
 ```text
 /plugin marketplace add Metalingo/thetaone-skills
-/plugin install thetaone-skills@thetaone
+/plugin install tto@thetaone
 ```
 
-7개 스킬이 한 번에 설치됩니다. 설치 후 새 세션에서 `/thetaone-skills:clarify`처럼 호출하세요.
+7개 스킬이 한 번에 설치됩니다. 설치 후 새 세션에서 `/tto:clarify`처럼 호출하세요. 기존 `thetaone-skills@thetaone` 사용자는 marketplace를 업데이트한 뒤 기존 플러그인을 제거하고 `tto@thetaone`을 설치하세요.
 
 <details>
 <summary>플러그인 업데이트</summary>
@@ -169,7 +169,7 @@ Claude Code 대화창에서 차례로 실행합니다.
 
 ```sh
 claude plugin marketplace update thetaone
-claude plugin update thetaone-skills@thetaone
+claude plugin update tto@thetaone
 ```
 
 </details>

@@ -5,7 +5,7 @@
   },
   "plugins": [
     {
-      "name": "thetaone-skills",
+      "name": "tto",
       "source": "./",
       "description": "Composable skills for evidence-based development: clarify, implement, review, and verify."
     }

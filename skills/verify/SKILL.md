@@ -7,6 +7,8 @@ description: Verify that a specified change reached the intended environment and
 
 ## Communication
 
+When running as the Claude Code plugin, resolve Thetaone skill handoffs within the `tto` plugin (for example, `tto:ste-explain` or `tto:smart-commit`). In other environments, use that installation's skill names. Preserve project rules.
+
 When explaining findings or asking the worker a question, use the installed `ste-explain` skill through the environment's skill mechanism, or read its SKILL.md if no invocation tool exists. Load it once and apply it alongside this workflow, preserving required templates. If it is unavailable, keep terms consistent, put conditions before actions, and distinguish evidence from assumptions; do not block the task on installation.
 
 Determine whether a deployed change works. Do not edit product code, add instrumentation, change configuration, deploy, or repair the implementation through this skill.

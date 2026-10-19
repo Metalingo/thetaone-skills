@@ -7,6 +7,8 @@ description: Commit the requested changes, push the working branch, and create o
 
 ## Communication
 
+When running as the Claude Code plugin, resolve Thetaone skill handoffs within the `tto` plugin (for example, `tto:ste-explain` or `tto:smart-commit`). In other environments, use that installation's skill names. Preserve project rules.
+
 When explaining findings or asking the worker a question, use the installed `ste-explain` skill through the environment's skill mechanism, or read its SKILL.md if no invocation tool exists. Load it once and apply it alongside this workflow, preserving required templates. If it is unavailable, keep terms consistent, put conditions before actions, and distinguish evidence from assumptions; do not block the task on installation.
 
 Default scope is commit → push → create or update the PR. Honor explicit limits such as commit-only, push-only, or no PR, and project authorization rules. A PR-only request can use this skill too: skip completed stages rather than making an empty commit.

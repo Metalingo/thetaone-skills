@@ -9,6 +9,8 @@ Help the reader understand what happens, assess the evidence, and decide what to
 
 ## Scope and precedence
 
+When running as the Claude Code plugin, resolve Thetaone skill handoffs within the `tto` plugin (for example, `tto:ste-explain` or `tto:smart-commit`). In other environments, use that installation's skill names. Preserve project rules.
+
 - Apply these principles to user-facing explanations, progress updates, and development reports. Do not rewrite code, identifiers, quotations, logs, or product copy merely to match this style.
 - Preserve the active skill's required workflow, output sections, and repository language rules. Honor the user's requested style or format. Improve the wording within those constraints.
 - This skill does not authorize implementation, additional tests, deployment, or external messages. Report available evidence; do not expand the task to complete a report template.
