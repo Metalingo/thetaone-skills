@@ -42,12 +42,12 @@ Routine technical uncertainty and stage transitions are not blockers. Actual acc
 Load and invoke the installed skills in this order without another end-to-end request:
 
 1. `smart-commit`: pass the ticket or slice, worktree, branch, base, plan, intended changes, and check results. Complete commit, push, and PR creation or update. Confirm the returned PR and compared commit before continuing.
-2. `review-pr`: pass the PR and ticket acceptance criteria. Complete the review and report its findings and verdict. This step is part of the task, not an optional suggestion after PR creation. Report defects found in the first PR review to the worker, including straightforward omissions or typos; do not silently repair them and replace the original verdict with a passing review. Await the worker's response unless a response to those findings was already explicitly authorized.
+2. `review-pr`: pass the PR and ticket acceptance criteria. Complete the review, publish it to the PR, and report its findings and verdict. Invoking `implement` is the explicit authorization `review-pr` requires to publish; do not ask again. Before posting, confirm the PR's current head is the reviewed commit; if it changed, review the new head first. Post the review as an ordinary PR comment, not a GitHub API approval or change request, and follow the project's language rule for review comments when one exists. Posting the review does not authorize a merge. This step is part of the task, not an optional suggestion after PR creation. Report defects found in the first PR review to the worker, including straightforward omissions or typos; do not silently repair them and replace the original verdict with a passing review. Await the worker's response unless a response to those findings was already explicitly authorized.
 
 When called here, these skills are stages of this workflow; their standalone stopping points do not end `implement`. If a skill is unavailable, follow the equivalent project procedure and disclose the fallback. Do not invent a successful commit, PR, or review. Do not start an indefinite fix/review loop to obtain approval.
 
 ## Completion
 
-Complete the task by reporting the ticket, PR, commit, checks, review verdict, and material remaining findings. Record the handoff in the plan. Do not claim completion after local edits or tests alone, and do not equate a completed review with an approval.
+Complete the task by reporting the ticket, PR, commit, checks, review verdict and posted comment, and material remaining findings. Record the handoff in the plan. Do not claim completion after local edits or tests alone, and do not equate a completed review with an approval.
 
 After the project's deployment process, recommend `verify` with the PR or release identity, target environment, and acceptance criteria. Do not wait for, trigger, or verify deployment as part of the default workflow.
